@@ -1,28 +1,38 @@
 pipeline {
-    agent {
+    agent none
+    stages {
+        stage('SCM') {
+            agent any
+            steps {
+                git url: "https://github.com/vickyrathod/khaopiobackend.git"
+            }
+        }
+        stage('Build') {
+            agent {
         docker {
             image 'maven:3-alpine'
-	    args '-v /root/.m2:/root/.m2'
-        }
-    }
-    stages {
-	stage('SCM') {
-	    steps {
-		git url: "https://github.com/vickyrathod/khaopiobackend.git"
-	    }
-	}
-        stage('Build') {
+            args '-v /root/.m2:/root/.m2'
+                }
+            }
             steps {
                sh 'mvn clean package docker:build'
             }
         }
         stage('tag and publish') {
+            agent any
             steps {
-		 withDockerRegistry([ credentialsId: "6544de7e-17a4-4576-9b9b-e86bc1e4f903", url: "" ]){
-                sh "docker tag vicky123/catalogservices:latest vicky123/catalogservices:${env.BUILD_ID}"
-                sh "docker push vicky123/catalogservices:${env.BUILD_ID}"
+                sh "docker tag vicky123/catalogservices:latest vicky123/catalogservices:${env.BUILD_ID}";
+                withDockerRegistry([ credentialsId: "6544de7e-17a4-4576-9b9b-e86bc1e4f903", url: "" ]){
+                sh "docker push vicky123/catalogservices:${env.BUILD_ID}";
                 }
             }
         }
+	stage('clean space') {
+		agent any
+		steps{
+		 sh "docker rmi $(docker images | grep 'vicky123/catalogservices')"
+		}
+	}
     }
 }
+
