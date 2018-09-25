@@ -6,7 +6,6 @@
 	<groupId>hacker.com</groupId>
 	<artifactId>app</artifactId>
 	<packaging>jar</packaging>
-
 	<name>testmysql</name>
 	<description>Demo project for Spring Boot</description>
 
