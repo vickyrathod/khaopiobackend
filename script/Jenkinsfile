@@ -30,7 +30,7 @@ pipeline {
 	stage('clean space') {
 		agent any
 		steps{
-		 sh "docker rmi $(docker images | grep 'vicky123/catalogservices')"
+		 sh "docker rmi \$(docker images | grep 'vicky123/catalogservices')"
 		}
 	}
     }
