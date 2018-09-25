@@ -2,6 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3-alpine'
+	    args '-v /root/.m2:/root/.m2'
         }
     }
     stages {
@@ -15,8 +16,9 @@ pipeline {
                sh 'mvn clean package docker:build'
             }
         }
-        stage('publish') {
+        stage('tag and publish') {
             steps {
+		sh 'docker tag vicky123/catalogservices:latest vicky123/catalogservices:${env.BUILD_ID}'
                 sh 'docker push vicky123/catalogservices:${env.BUILD_ID}'
             }
         }
