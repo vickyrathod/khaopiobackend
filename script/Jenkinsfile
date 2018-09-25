@@ -15,14 +15,9 @@ pipeline {
                sh 'mvn clean package docker:build'
             }
         }
-        stage('Test') {
+        stage('publish') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                sh 'docker push vicky123/catalogservices:${env.BUILD_ID}'
             }
         }
     }
