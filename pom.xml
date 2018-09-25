@@ -59,6 +59,7 @@
 					<image>${docker.image.name}</image>
 					<imageName>${docker.image.name}</imageName>
 					<newName>${docker.image.name}-B${env.BUILD_ID}</newName>
+					<dockerDirectory>.</dockerDirectory>
 					<resources>
 						<resource>
 							<targetPath>/</targetPath>
