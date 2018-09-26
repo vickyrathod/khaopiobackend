@@ -1,5 +1,8 @@
 pipeline {
     agent none
+    when {
+	branch: 'master'
+}
     stages {
         stage('SCM') {
             agent any
@@ -31,7 +34,14 @@ pipeline {
 	stage('clean space') {
 		agent any
 		steps{
-		 sh "docker rmi \$(docker images | grep 'vicky123/catalogservices')"
+		 sh "docker rmi -f $(docker images --format '{{.Repository}}' | grep 'vicky123/catalogservices')"
+		}
+	}
+	
+	stage('deploy') {
+		agent any
+		steps{
+		 sh "echo 'sh khaopio/restart.sh'| ssh -i ${JENKINS_HOME}/khaopio/id_rsa khaopio007@khaopio.in"
 		}
 	}
     }
